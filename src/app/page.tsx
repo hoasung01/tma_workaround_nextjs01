@@ -16,22 +16,27 @@ export default function Home() {
   // Function to connect the wallet
   const connectWallet = async () => {
     try {
-      // Check if MetaMask is available
       if (typeof window.ethereum !== 'undefined') {
         // Use MetaMask's provider if available
         const web3Provider = new ethers.BrowserProvider(window.ethereum);
         await window.ethereum.request({ method: 'eth_requestAccounts' });
         const signer = await web3Provider.getSigner();
         const address = await signer.getAddress();
-        setWalletAddress(address); // Store wallet address
+        setWalletAddress(address);
       } else {
         // Use Alchemy provider if MetaMask is not available
         const alchemyProvider = new ethers.JsonRpcProvider(
-          process.env.ALCHEMY_API_KEY // Fetch Alchemy URL from environment variable
+          process.env.ALCHEMY_API_KEY
         );
-        const wallet = ethers.Wallet.createRandom(); // Create a random wallet for interaction
+
+        // For example, get the latest block number from the Alchemy provider
+        const latestBlockNumber = await alchemyProvider.getBlockNumber();
+        console.log('Latest block number:', latestBlockNumber);
+
+        // Since there's no user-provided wallet in this case, you can create a random wallet
+        const wallet = ethers.Wallet.createRandom();
         setWalletAddress(wallet.address); // Set the random wallet address
-        setError(null); // Clear error
+        setError(null);
       }
     } catch (err) {
       console.error('Error connecting to the wallet:', err);
