@@ -11,9 +11,9 @@ export default function Home() {
   const [stakedTokens, setStakedTokens] = useState<number>(0);
   const [rewards, setRewards] = useState<number>(0);
   const [marketplace, setMarketplace] = useState<{ name: string; price: number }[]>([]);
-  const [provider, setProvider] = useState<any | null>(null); // Storing provider in state
   const [error, setError] = useState<string | null>(null);
 
+  // Function to connect the wallet
   const connectWallet = async () => {
     try {
       // Check if MetaMask is available
@@ -23,14 +23,12 @@ export default function Home() {
         await window.ethereum.request({ method: 'eth_requestAccounts' });
         const signer = await web3Provider.getSigner();
         const address = await signer.getAddress();
-        setProvider(web3Provider); // Store provider
         setWalletAddress(address); // Store wallet address
       } else {
         // Use Alchemy provider if MetaMask is not available
         const alchemyProvider = new ethers.JsonRpcProvider(
           process.env.ALCHEMY_API_KEY // Fetch Alchemy URL from environment variable
         );
-        setProvider(alchemyProvider); // Set Alchemy as provider
         const wallet = ethers.Wallet.createRandom(); // Create a random wallet for interaction
         setWalletAddress(wallet.address); // Set the random wallet address
         setError(null); // Clear error
