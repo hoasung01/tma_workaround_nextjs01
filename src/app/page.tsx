@@ -105,7 +105,7 @@ export default function Home() {
             <p>📈 Staked Tokens: <strong>{stakedTokens}</strong></p>
             <p>🎁 Earned Rewards: <strong>{rewards}</strong></p>
           </div>
-          
+
           <div className="actions">
             <button onClick={mineTokensWithNFT} className="btn primary">
               🚀 Mine Tokens and Discover NFT
