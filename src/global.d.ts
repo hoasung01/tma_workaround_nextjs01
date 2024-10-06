@@ -1,8 +1,9 @@
 // src/global.d.ts
+
 interface EthereumProvider {
-  request: (args: { method: string }) => Promise<any>;
+  request: (args: { method: string; params?: unknown[] }) => Promise<unknown>;
   isMetaMask?: boolean;
-  on?: (event: string, handler: (...args: any[]) => void) => void;
+  on?: (event: string, handler: (...args: unknown[]) => void) => void;
 }
 
 interface Window {
