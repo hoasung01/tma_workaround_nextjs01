@@ -26,7 +26,7 @@ export default function Home() {
       } else {
         // Use Alchemy provider if MetaMask is not available
         const alchemyProvider = new ethers.JsonRpcProvider(
-          process.env.ALCHEMY_API_KEY
+          `https://eth-mainnet.alchemyapi.io/v2/${process.env.ALCHEMY_API_KEY}`
         );
 
         // For example, get the latest block number from the Alchemy provider
