@@ -11,23 +11,33 @@ export default function Home() {
   const [stakedTokens, setStakedTokens] = useState<number>(0);
   const [rewards, setRewards] = useState<number>(0);
   const [marketplace, setMarketplace] = useState<{ name: string; price: number }[]>([]);
+  const [provider, setProvider] = useState<any | null>(null); // Storing provider in state
   const [error, setError] = useState<string | null>(null);
 
   const connectWallet = async () => {
-    if (typeof window !== 'undefined' && typeof window.ethereum !== 'undefined') {
-      try {
-        const provider = new ethers.BrowserProvider(window.ethereum);
+    try {
+      // Check if MetaMask is available
+      if (typeof window.ethereum !== 'undefined') {
+        // Use MetaMask's provider if available
+        const web3Provider = new ethers.BrowserProvider(window.ethereum);
         await window.ethereum.request({ method: 'eth_requestAccounts' });
-        const signer = await provider.getSigner();
+        const signer = await web3Provider.getSigner();
         const address = await signer.getAddress();
-        setWalletAddress(address);
-      } catch (err) {
-        console.error('Error connecting to MetaMask:', err);
-        setError('Could not connect to wallet. Make sure MetaMask is unlocked.');
+        setProvider(web3Provider); // Store provider
+        setWalletAddress(address); // Store wallet address
+      } else {
+        // Use Alchemy provider if MetaMask is not available
+        const alchemyProvider = new ethers.JsonRpcProvider(
+          process.env.ALCHEMY_API_KEY // Fetch Alchemy URL from environment variable
+        );
+        setProvider(alchemyProvider); // Set Alchemy as provider
+        const wallet = ethers.Wallet.createRandom(); // Create a random wallet for interaction
+        setWalletAddress(wallet.address); // Set the random wallet address
+        setError(null); // Clear error
       }
-    } else {
-      console.error('MetaMask is not installed');
-      setError('MetaMask is not installed. Please install it to connect your wallet.');
+    } catch (err) {
+      console.error('Error connecting to the wallet:', err);
+      setError('Could not connect to wallet.');
     }
   };
 
