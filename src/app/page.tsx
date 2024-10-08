@@ -30,7 +30,9 @@ export default function Home() {
             <div className="bottom-menu">
                 <button className="menu-item">🏠 Home</button>
                 <button className="menu-item">🏆 Leaderboard</button>
+                <button className="menu-item">📋 Daily Tasks</button>
                 <button className="menu-item">👥 Friends</button>
+                <button className="menu-item">💼 Wallet</button>
             </div>
         </div>
     );
